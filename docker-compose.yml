@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.6.1-management
+    expose:
+      - '5672'
+      - '15672'
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  sbt:
+    image: 1science/sbt
+    volumes:
+      - ./:/app
+      - ${HOME}/.ivy2:/tmp/ivy
+    command: "sbt -ivy /tmp/ivy itest:test"
+    links:
+      - rabbitmq
